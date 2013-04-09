@@ -1,2 +1,4 @@
-def 'tracker.models.Character', class Character extends Backbone.Model
+class Character extends Backbone.Model
+
+def 'tracker.models.Character', Character
 

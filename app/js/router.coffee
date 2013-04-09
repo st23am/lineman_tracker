@@ -1,4 +1,4 @@
-def 'tracker.Router', class Router extends Backbone.Router
+class Router extends Backbone.Router
 
   routes:
     "*path" : "characterList"
@@ -16,4 +16,5 @@ def 'tracker.Router', class Router extends Backbone.Router
     view = new viewClass(options, el: @container.get(0))
     @container.append(view.render())
 
+def 'tracker.Router', Router
 

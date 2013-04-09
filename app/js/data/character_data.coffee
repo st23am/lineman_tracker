@@ -5,4 +5,9 @@ def 'tracker.data.Characters', ->
       name: "Tim the Wizard"
       initiative: 20
     }
+    {
+      id: 2
+      name: "Dave the Barbarian"
+      initiative: 18
+    }
   ]

@@ -1,4 +1,4 @@
-def 'tracker.views.CharacterList', class CharacterList extends Backbone.View
+class CharacterList extends Backbone.View
   el: "#characters"
 
   template: JST["app/templates/character_list.hb"]
@@ -11,3 +11,6 @@ def 'tracker.views.CharacterList', class CharacterList extends Backbone.View
 
   render: ->
     @template(characters: @collection.models)
+
+def 'tracker.views.CharacterList', CharacterList
+
