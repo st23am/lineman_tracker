@@ -27,32 +27,33 @@ def 'tracker.views.Grid', class Grid
         i++
       i = 0
       while i < hexes.length
-        hex = new Hex(map, hexes[i].x, hexes[i].y, i, row_num)
-        drawn_hex = hex.draw(map, hex_size, hexes[i].x, hexes[i].y, 1)
+        hex = new Hex(map, hexes[i].x, hexes[i].y, i, row_num, hex_size)
+        drawn_hex = hex.draw()
         drawn_hex.attr fill: "#abcdef"
         drawn_hex.paper.text hexes[i].x - hex_size / 2, hexes[i].y, row_num + "," + i
-        drawn_hex.grid_location = "#{row_num}, #{i}"
         drawn_hex.click ->
           @attr fill: "green"
-          console.log "Hex location: #{@grid_location} was clicked"
+          console.log "Hex location: #{drawn_hex.grid_location} was clicked"
         i++
       row_num++
 
 class Hex
-  constructor: (map, cx, cy, x, y ) ->
+  constructor: (map, x, y, hex_num, row_num, hex_size) ->
     @map = map
-    @cx = cx
-    @cy = cy
     @x = x
     @y = y
-    @grid_location = ""
+    @hex_size = hex_size
+    @hex_num = hex_num
+    @row_num = row_num
+    @grid_location = "#{@row_num}, #{@hex_num}"
 
-  draw:  (map, s, center_x, center_y, fact) ->
-    size = s / 2 * fact
+  draw: ->
+    fact = 1
+    size = @hex_size / 2 * fact
     x = size / 2
     y = size * Math.sqrt(3) / 2
-    p1_x = center_x - s * fact
-    p1_y = center_y
+    p1_x = @x - @hex_size * fact
+    p1_y = @y
     p2_x = p1_x + x
     p2_y = p1_y - y
     p3_x = p2_x + (2 * x)
@@ -64,5 +65,5 @@ class Hex
     p6_x = p5_x - (2 * x)
     p6_y = p5_y
 
-    return map.paper.path("M" + p1_x + " " + p1_y + "L" + p2_x + " " + p2_y + "L" + p3_x + " " + p3_y + "L" + p4_x + " " + p4_y + "L" + p5_x + " " + p5_y + "L" + p6_x + " " + p6_y + "L" + p1_x + " " + p1_y + "Z")
+    return @map.paper.path("M" + p1_x + " " + p1_y + "L" + p2_x + " " + p2_y + "L" + p3_x + " " + p3_y + "L" + p4_x + " " + p4_y + "L" + p5_x + " " + p5_y + "L" + p6_x + " " + p6_y + "L" + p1_x + " " + p1_y + "Z")
 
