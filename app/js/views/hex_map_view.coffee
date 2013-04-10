@@ -6,6 +6,7 @@ def 'tracker.views.Grid', class Grid
     @hexes = []
 
   draw_map: (map, rows, hex_size, columns) ->
+    #TODO: get rid of these nested whiles w/ list comprehensions and smaller methods
     row_num = 0
     while row_num < rows
       hexes = [ ]
@@ -44,6 +45,12 @@ class Hex
     @grid_location = "#{@row_num}, #{@hex_num}"
     @paper_path = ''
 
+  toggleHexColor: ->
+    if @paper_path.attrs.fill == "#abcdef"
+      "green"
+    else
+      "#abcdef"
+
   draw: ->
     size = @hex_size / 2
     x = @hex_size / 4
@@ -62,11 +69,12 @@ class Hex
     p6_y = p5_y
     path_string = "#{p1_x} #{p1_y}L#{p2_x} #{p2_y}L#{p3_x} #{p3_y}L#{p4_x} #{p4_y}L#{p5_x} #{p5_y}L#{p6_x} #{p6_y}L#{p1_x} #{p1_y}"
     final_string = "M#{path_string}Z"
-    drawn_hex = @map.paper.path(final_string)
-    drawn_hex.attr fill: "#abcdef"
-    drawn_hex.paper.text @x - @hex_size / 2, @y, @row_num + "," + @hex_num
-    drawn_hex.click ->
-      @attr fill: "green"
-      console.log "Hex location: #{@grid_location} was clicked"
-    @paper_path = drawn_hex
+    @paper_path = @map.paper.path(final_string)
+    @paper_path.attr fill: "#abcdef"
+    @paper_path.paper.text @x - @hex_size / 2, @y, @row_num + "," + @hex_num
+    @paper_path.hex = this
+    @paper_path.click ->
+      @attr fill: @hex.toggleHexColor()
+      console.log "Hex location: #{@hex.grid_location} was clicked"
+      console.log(@hex)
     this
