@@ -51,7 +51,7 @@ class Hex
     size = @hex_size / 2
     x = size / 2
     y = size * Math.sqrt(3) / 2
-    p1_x = @x - @hex_size * fact
+    p1_x = @x - @hex_size
     p1_y = @y
     p2_x = p1_x + x
     p2_y = p1_y - y
