@@ -43,13 +43,15 @@ class Hex
     @hex_num = hex_num
     @row_num = row_num
     @grid_location = "#{@row_num}, #{@hex_num}"
-    @paper_path = ''
+    @paper_path = {}
 
   toggleHexColor: ->
     if @paper_path.attrs.fill == "#abcdef"
-      "green"
+      @paper_path.attr fill: "green"
+      console.log "Hex location: #{@grid_location} was filled"
+      console.log(this)
     else
-      "#abcdef"
+      @paper_path.attr fill: "#abcdef"
 
   draw: ->
     size = @hex_size / 2
@@ -74,7 +76,5 @@ class Hex
     @paper_path.paper.text @x - @hex_size / 2, @y, @row_num + "," + @hex_num
     @paper_path.hex = this
     @paper_path.click ->
-      @attr fill: @hex.toggleHexColor()
-      console.log "Hex location: #{@hex.grid_location} was clicked"
-      console.log(@hex)
+      @hex.toggleHexColor()
     this
