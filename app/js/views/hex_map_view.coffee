@@ -3,11 +3,12 @@ def 'tracker.views.Grid', class Grid
     @width = width
     @height = height
     @paper = Raphael(domID, 960, 960)
+    @hexes = []
 
   draw_map: (map, rows, hex_size, columns) ->
     row_num = 0
     while row_num < rows
-      hexes = [  ]
+      hexes = [ ]
       hexes[0] =
         x: hex_size
         y: (row_num * hex_size * Math.sqrt(3) / 2) + (hex_size * Math.sqrt(3) / 2)
@@ -27,13 +28,8 @@ def 'tracker.views.Grid', class Grid
         i++
       i = 0
       while i < hexes.length
-        hex = new Hex(map, hexes[i].x, hexes[i].y, i, row_num, hex_size)
-        drawn_hex = hex.draw()
-        drawn_hex.attr fill: "#abcdef"
-        drawn_hex.paper.text hexes[i].x - hex_size / 2, hexes[i].y, row_num + "," + i
-        drawn_hex.click ->
-          @attr fill: "green"
-          console.log "Hex location: #{drawn_hex.grid_location} was clicked"
+        hex = new Hex(this, hexes[i].x, hexes[i].y, i, row_num, hex_size)
+        @hexes.push hex.draw()
         i++
       row_num++
 
@@ -46,6 +42,7 @@ class Hex
     @hex_num = hex_num
     @row_num = row_num
     @grid_location = "#{@row_num}, #{@hex_num}"
+    @paper_path = ''
 
   draw: ->
     size = @hex_size / 2
@@ -63,6 +60,13 @@ class Hex
     p5_y = p4_y + y
     p6_x = p5_x - (2 * x)
     p6_y = p5_y
-
-    return @map.paper.path("M#{p1_x} #{p1_y}L#{p2_x} #{p2_y}L#{p3_x} #{p3_y}L#{p4_x} #{p4_y}L#{p5_x} #{p5_y}L#{p6_x} #{p6_y}L#{p1_x} #{p1_y}Z")
-
+    path_string = "#{p1_x} #{p1_y}L#{p2_x} #{p2_y}L#{p3_x} #{p3_y}L#{p4_x} #{p4_y}L#{p5_x} #{p5_y}L#{p6_x} #{p6_y}L#{p1_x} #{p1_y}"
+    final_string = "M#{path_string}Z"
+    drawn_hex = @map.paper.path(final_string)
+    drawn_hex.attr fill: "#abcdef"
+    drawn_hex.paper.text @x - @hex_size / 2, @y, @row_num + "," + @hex_num
+    drawn_hex.click ->
+      @attr fill: "green"
+      console.log "Hex location: #{@grid_location} was clicked"
+    @paper_path = drawn_hex
+    this
