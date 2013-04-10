@@ -29,12 +29,12 @@ def 'tracker.views.Grid', class Grid
         i++
       i = 0
       while i < hexes.length
-        hex = new Hex(this, hexes[i].x, hexes[i].y, i, row_num, hex_size)
+        hex = new tracker.views.Hex(this, hexes[i].x, hexes[i].y, i, row_num, hex_size)
         @hexes.push hex.draw()
         i++
       row_num++
 
-class Hex
+def 'tracker.views.Hex', class Hex
   constructor: (map, x, y, hex_num, row_num, hex_size) ->
     @map = map
     @x = x
@@ -45,7 +45,7 @@ class Hex
     @grid_location = "#{@row_num}, #{@hex_num}"
     @paper_path = {}
 
-  toggleHexColor: ->
+  toggleFillColor: ->
     if @paper_path.attrs.fill == "#abcdef"
       @paper_path.attr fill: "green"
       console.log "Hex location: #{@grid_location} was filled"
@@ -72,9 +72,12 @@ class Hex
     path_string = "#{p1_x} #{p1_y}L#{p2_x} #{p2_y}L#{p3_x} #{p3_y}L#{p4_x} #{p4_y}L#{p5_x} #{p5_y}L#{p6_x} #{p6_y}L#{p1_x} #{p1_y}"
     final_string = "M#{path_string}Z"
     @paper_path = @map.paper.path(final_string)
+    @setPaperAttrs()
+    this
+
+  setPaperAttrs: ->
     @paper_path.attr fill: "#abcdef"
-    @paper_path.paper.text @x - @hex_size / 2, @y, @row_num + "," + @hex_num
+    @paper_path.paper.text(@x - @hex_size / 2, @y, "#{@row_num}, #{@hex_num}")
     @paper_path.hex = this
     @paper_path.click ->
-      @hex.toggleHexColor()
-    this
+      @hex.toggleFillColor()
