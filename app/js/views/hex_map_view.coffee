@@ -48,8 +48,7 @@ class Hex
     @grid_location = "#{@row_num}, #{@hex_num}"
 
   draw: ->
-    fact = 1
-    size = @hex_size / 2 * fact
+    size = @hex_size / 2
     x = size / 2
     y = size * Math.sqrt(3) / 2
     p1_x = @x - @hex_size * fact
