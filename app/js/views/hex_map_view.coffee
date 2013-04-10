@@ -49,7 +49,7 @@ class Hex
 
   draw: ->
     size = @hex_size / 2
-    x = size / 2
+    x = @hex_size / 4
     y = size * Math.sqrt(3) / 2
     p1_x = @x - @hex_size
     p1_y = @y
@@ -64,5 +64,5 @@ class Hex
     p6_x = p5_x - (2 * x)
     p6_y = p5_y
 
-    return @map.paper.path("M" + p1_x + " " + p1_y + "L" + p2_x + " " + p2_y + "L" + p3_x + " " + p3_y + "L" + p4_x + " " + p4_y + "L" + p5_x + " " + p5_y + "L" + p6_x + " " + p6_y + "L" + p1_x + " " + p1_y + "Z")
+    return @map.paper.path("M#{p1_x} #{p1_y}L#{p2_x} #{p2_y}L#{p3_x} #{p3_y}L#{p4_x} #{p4_y}L#{p5_x} #{p5_y}L#{p6_x} #{p6_y}L#{p1_x} #{p1_y}Z")
 
