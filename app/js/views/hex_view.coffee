@@ -7,44 +7,55 @@ def 'tracker.views.Hex', class Hex
     @hex_num = hex_num
     @row_num = row_num
     @grid_location = "#{@row_num}, #{@hex_num}"
-    @paper_path = {}
+    @points = []
+    @element = {}
+    @compute_points()
 
   toggleFillColor: ->
-    if @paper_path.attrs.fill == "#abcdef"
-      @paper_path.attr fill: "green"
+    if @element.attrs.fill == "#abcdef"
+      @element.attr fill: "green"
       console.log "Hex location: #{@grid_location} was filled"
       console.log(this)
     else
-      @paper_path.attr fill: "#abcdef"
+      @element.attr fill: "#abcdef"
 
-  draw: ->
+  compute_points: ->
     size = @hex_size / 2
     x = @hex_size / 4
     y = size * Math.sqrt(3) / 2
+    @points.push
+      x: @x - @hex_size
+      y: @y
+    @points.push
+      x: @points[0].x + x
+      y: @points[0].y - y
+    @points.push
+      x: @points[1].x + (2 * x)
+      y: @points[1].y
+    @points.push
+      x: @points[2].x + x
+      y: @points[2].y + y
+    @points.push
+      x: @points[3].x - x
+      y: @points[3].y + y
+    @points.push
+      x: @points[4].x - (2 * x)
+      y: @points[4].y
 
-    p1_x = @x - @hex_size
-    p1_y = @y
-    p2_x = p1_x + x
-    p2_y = p1_y - y
-    p3_x = p2_x + (2 * x)
-    p3_y = p2_y
+  path_string: ->
+    p = @points
+    path_string = "#{p[0].x} #{p[0].y}L#{p[1].x} #{p[1].y}L#{p[2].x} #{p[2].y}L#{p[3].x} #{p[3].y}L#{p[4].x} #{p[4].y}L#{p[5].x} #{p[5].y}L#{p[0].x} #{p[0].y}"
+    "M#{path_string}Z"
 
-    p4_x = p3_x + x
-    p4_y = p3_y + y
-    p5_x = p4_x - x
-    p5_y = p4_y + y
-    p6_x = p5_x - (2 * x)
-    p6_y = p5_y
-
-    path_string = "#{p1_x} #{p1_y}L#{p2_x} #{p2_y}L#{p3_x} #{p3_y}L#{p4_x} #{p4_y}L#{p5_x} #{p5_y}L#{p6_x} #{p6_y}L#{p1_x} #{p1_y}"
-    final_string = "M#{path_string}Z"
-    @paper_path = @map.paper.path(final_string)
-    @setPaperAttrs()
+  draw: ->
+    @element = @map.paper.path(@path_string())
+    @setElementAttrs()
     this
 
-  setPaperAttrs: ->
-    @paper_path.attr fill: "#abcdef"
-    @paper_path.paper.text(@x - @hex_size / 2, @y, "#{@grid_location}")
-    @paper_path.hex = this
-    @paper_path.click ->
+  setElementAttrs: ->
+    @element.attr fill: "#abcdef"
+    @element.paper.text(@x - @hex_size / 2, @y, "#{@grid_location}")
+    @element.hex = this
+    @element.click ->
       @hex.toggleFillColor()
+
