@@ -1,12 +1,12 @@
-def 'tracker.views.Hex', class Hex
-  constructor: (map, x, y, hex_num, row_num, hex_size) ->
+class Hex
+  constructor: (map, x, y, col_num, row_num, hex_size) ->
     @map = map
     @x = x
     @y = y
     @hex_size = hex_size
-    @hex_num = hex_num
+    @col_num = col_num
     @row_num = row_num
-    @grid_location = "#{@row_num}, #{@hex_num}"
+    @grid_location = "#{@row_num}, #{@col_num}"
     @points = []
     @element = {}
     @compute_points()
@@ -59,3 +59,4 @@ def 'tracker.views.Hex', class Hex
     @element.click ->
       @hex.toggleFillColor()
 
+def 'tracker.views.Hex', Hex
