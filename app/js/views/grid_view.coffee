@@ -5,7 +5,7 @@ def 'tracker.views.Grid', class Grid
     @paper = Raphael(domID, 960, 960)
     @hexes = []
 
-  draw_map: (map, rows, hex_size, columns) ->
+  draw_map: (map, rows, columns, hex_size) ->
     for row in [0..rows]
       hexes = [ ]
       hexes[0] =
