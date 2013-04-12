@@ -47,17 +47,22 @@ class HexView extends Backbone.View
     this
 
   setElementAttrs: ->
-    @svgElement.attr fill: "#abcdef"
+    @svgElement.attr fill: "green"
     @paper.text(@x - @hex_size / 2, @y, "#{@grid_location}")
+    @image = @paper.image("./img/hex_tiles/evergreenhills.png", @x - (@hex_size + 10) / 2, @y, 20, 20)
     @svgElement.click =>
       @toggleFillColor()
 
   toggleFillColor: ->
-    if @svgElement.attrs.fill == "#abcdef"
-      @svgElement.attr fill: "green"
+    if @svgElement.attrs.fill == "green"
+      @svgElement.attr fill: "blue"
+      $(@image[0]).remove()
+      @image = @paper.image("./img/hex_tiles/shipwreck.png", @x - (@hex_size + 10) / 2, @y, 20, 20)
       console.log "Hex location: #{@grid_location} was filled"
       console.log(this)
     else
-      @svgElement.attr fill: "#abcdef"
+      $(@image[0]).remove()
+      @image = @paper.image("./img/hex_tiles/evergreenhills.png", @x - (@hex_size + 10) / 2, @y, 20, 20)
+      @svgElement.attr fill: "green"
 
 def 'tracker.views.HexView', HexView

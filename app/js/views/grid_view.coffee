@@ -22,6 +22,6 @@ class Grid
           x: this_x
           y: this_y
       for hex_num in [0...hexes.length]
-        @hexes.push new tracker.views.HexView(@paper, hexes[hex_num].x, hexes[hex_num].y, hex_num, row, hex_size).render()
+       @hexes.push new tracker.views.HexView(@paper, hexes[hex_num].x, hexes[hex_num].y, hex_num, row, hex_size).render()
 
 def 'tracker.views.Grid', Grid
