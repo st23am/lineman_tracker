@@ -1,6 +1,6 @@
-class Hex
-  constructor: (map, x, y, col_num, row_num, hex_size) ->
-    @map = map
+class HexView extends Backbone.View
+  initialize: (paper, x, y, col_num, row_num, hex_size) ->
+    @paper = paper
     @x = x
     @y = y
     @hex_size = hex_size
@@ -8,16 +8,8 @@ class Hex
     @row_num = row_num
     @grid_location = "#{@row_num}, #{@col_num}"
     @points = []
-    @element = {}
     @compute_points()
-
-  toggleFillColor: ->
-    if @element.attrs.fill == "#abcdef"
-      @element.attr fill: "green"
-      console.log "Hex location: #{@grid_location} was filled"
-      console.log(this)
-    else
-      @element.attr fill: "#abcdef"
+    super
 
   compute_points: ->
     size = @hex_size / 2
@@ -43,20 +35,29 @@ class Hex
       y: @points[4].y
 
   path_string: ->
-    p = @points
-    path_string = "#{p[0].x} #{p[0].y}L#{p[1].x} #{p[1].y}L#{p[2].x} #{p[2].y}L#{p[3].x} #{p[3].y}L#{p[4].x} #{p[4].y}L#{p[5].x} #{p[5].y}L#{p[0].x} #{p[0].y}"
+    path_string = ""
+    for point in @points
+      path_string += "#{point.x} #{point.y}L"
+    path_string += "#{@points[0].x} #{@points[0].y}L"
     "M#{path_string}Z"
 
-  draw: ->
-    @element = @map.paper.path(@path_string())
+  render: ->
+    @svgElement = @paper.path(@path_string())
     @setElementAttrs()
     this
 
   setElementAttrs: ->
-    @element.attr fill: "#abcdef"
-    @element.paper.text(@x - @hex_size / 2, @y, "#{@grid_location}")
-    @element.hex = this
-    @element.click ->
-      @hex.toggleFillColor()
+    @svgElement.attr fill: "#abcdef"
+    @paper.text(@x - @hex_size / 2, @y, "#{@grid_location}")
+    @svgElement.click =>
+      @toggleFillColor()
 
-def 'tracker.views.Hex', Hex
+  toggleFillColor: ->
+    if @svgElement.attrs.fill == "#abcdef"
+      @svgElement.attr fill: "green"
+      console.log "Hex location: #{@grid_location} was filled"
+      console.log(this)
+    else
+      @svgElement.attr fill: "#abcdef"
+
+def 'tracker.views.HexView', HexView
